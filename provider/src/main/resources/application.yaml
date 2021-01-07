@@ -6,3 +6,15 @@ keycloak:
     secret: 95b22d8a-1696-4314-824e-192947bf39ae
   disable-trust-manager: true
 
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://84.81.167.197:8761/eureka/
+  instance:
+    hostname: localhost
+spring:
+  application:
+    name: PROVIDER-SERVICE
+
