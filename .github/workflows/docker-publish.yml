@@ -1,0 +1,75 @@
+name: Docker
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE_NAME: tw_service_registry
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Run tests
+        run: |
+            ls
+            mvn -B test --file service-registry/pom.xml
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    # Ensure test job passes before pushing image.
+    needs: test
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Log into registry
+        run: | 
+         docker login -u '${{ secrets.DOCKER_USER }}' -p '${{ secrets.DOCKER_PASSWORD }}'
+         
+      - name: Push image
+        run: |
+          IMAGE_ID=docker.io/marcoweel/$IMAGE_NAME
+          VERSION=$(echo "1.0.0-$(date +'%Y-%m-%dT%H.%M.%S')")
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo IMAGE_ID=$IMAGE_ID
+          cd service-registry && chmod -R 777 *
+          ./mvnw spring-boot:build-image -D spring-boot.build-image.imageName=$IMAGE_NAME
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
+          
+      - name: Fast Webhook
+  # You may pin to the exact commit or the version.
+  # uses: jasongitmail/fast-webhook@6deed6ce6c4f3b7044a27fc272b7a019a6e4c41a
+        uses: jasongitmail/fast-webhook@v1.1.4
+        with:
+    # The webhook URL to send the request to.
+          url: ${{ secrets.DEPLOY_URL }}
