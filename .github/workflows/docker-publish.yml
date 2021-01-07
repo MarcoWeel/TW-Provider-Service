@@ -32,7 +32,7 @@ jobs:
       - name: Run tests
         run: |
             ls
-            mvn -B test --file service-registry/pom.xml
+            mvn -B test --file provider/pom.xml
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
@@ -59,7 +59,7 @@ jobs:
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           echo IMAGE_ID=$IMAGE_ID
-          cd service-registry && chmod -R 777 *
+          cd provider && chmod -R 777 *
           ./mvnw spring-boot:build-image -D spring-boot.build-image.imageName=$IMAGE_NAME
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
