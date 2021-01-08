@@ -34,7 +34,7 @@ class UserController{
        return userService.findByUsername(username);
     }
 
-    @GetMapping("role/{role}")
+    @GetMapping("/role/{role}")
     public List<UserRepresentation> findByRole(@PathVariable String role) {
         return userService.findByRole(role);
     }
