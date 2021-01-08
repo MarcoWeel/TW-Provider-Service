@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/group")
+@CrossOrigin("*")
 class GroupController{
     @Autowired
     private GroupService GroupService;
