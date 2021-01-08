@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public
@@ -37,6 +39,14 @@ class UserService{
                 .users()
                 .get(id)
                 .toRepresentation());
+    }
+    public List<UserRepresentation> findByRole(String role) {
+        Set<UserRepresentation> tempSet = keycloak
+                .realm(realmString)
+                .roles()
+                .get(role)
+                .getRoleUserMembers();
+        return (new ArrayList<UserRepresentation>(tempSet));
     }
     public void assignToGroup(String userId, String groupId) {
         keycloak

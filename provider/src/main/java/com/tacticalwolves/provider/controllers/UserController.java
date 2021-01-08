@@ -28,10 +28,17 @@ class UserController{
     public UserRepresentation findById(@PathVariable String id) {
        return userService.findById(id);
     }
+
     @GetMapping("/username/{username}")
     public List<UserRepresentation> findByUsername(@PathVariable String username) {
        return userService.findByUsername(username);
     }
+
+    @GetMapping("role/{role}")
+    public List<UserRepresentation> findByRole(@PathVariable String role) {
+        return userService.findByRole(role);
+    }
+
     @PostMapping
     public ResponseEntity<URI> create(@RequestBody UserRequest userRequest)
     {

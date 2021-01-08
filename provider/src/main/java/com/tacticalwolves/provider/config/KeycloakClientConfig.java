@@ -17,7 +17,7 @@ public class KeycloakClientConfig {
         String serverUrl = "https://84.86.167.197:8082/auth";
         String realm = "TacticalWolves";
         String clientId = "TacticalWolves-Admin";
-        String clientSecret = "95b22d8a-1696-4314-824e-192947bf39ae";
+        String clientSecret = "ce055536-ed4c-49e1-8b9b-a04d8ef04d5b";
         return KeycloakBuilder.builder().resteasyClient(new ResteasyClientBuilder().disableTrustManager().build())
                 .serverUrl(serverUrl) //
                 .realm(realm) //
