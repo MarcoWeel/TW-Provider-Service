@@ -5,6 +5,7 @@ keycloak:
   credentials:
     secret: ce055536-ed4c-49e1-8b9b-a04d8ef04d5b
   disable-trust-manager: true
+  ssl-required: NONE
 
 eureka:
   client:
@@ -17,4 +18,5 @@ eureka:
 spring:
   application:
     name: PROVIDER-SERVICE
+
 
